@@ -1,0 +1,30 @@
+digraph CourseRegistrationERD {
+    rankdir=LR;
+    node [shape=record, fontname="Arial", fontsize=10];
+
+    // Entities with corrected field names and types
+    Student [label="{ Student | student_id (PK, INT)\lname (VARCHAR 100)\lemail (VARCHAR 150, UNIQUE)\lmajor (VARCHAR 100)\lyear (ENUM)\lcreated_at (TIMESTAMP)\lupdated_at (TIMESTAMP) }"];
+    
+    Course [label="{ Course | course_id (PK, INT)\ltitle (VARCHAR 150)\lcredits (DECIMAL 3,1)\ldept_id (FK, INT)\linstructor_id (FK, INT, NULL)\lcreated_at (TIMESTAMP)\lupdated_at (TIMESTAMP) }"];
+    
+    Instructor [label="{ Instructor | instructor_id (PK, INT)\lname (VARCHAR 100)\lemail (VARCHAR 150, UNIQUE)\ldept_id (FK, INT)\lcreated_at (TIMESTAMP)\lupdated_at (TIMESTAMP) }"];
+    
+    Department [label="{ Department | dept_id (PK, INT)\ldept_name (VARCHAR 100, UNIQUE)\llocation (VARCHAR 150, NULL)\lcreated_at (TIMESTAMP)\lupdated_at (TIMESTAMP) }"];
+    
+    Registration [label="{ Registration | reg_id (PK, INT)\lstudent_id (FK, INT)\lcourse_id (FK, INT)\lsemester (VARCHAR 20)\lgrade (CHAR 2, NULL)\lregistered_at (TIMESTAMP)\lcreated_at (TIMESTAMP)\lupdated_at (TIMESTAMP)\lUNIQUE(student_id, course_id, semester) }"];
+
+    // Relationships with cardinalities and constraints
+    Student -> Registration [label="1..N\l(CASCADE DELETE)"];
+    Course -> Registration [label="1..N\l(CASCADE DELETE)"];
+    Department -> Course [label="1..N\l(CASCADE DELETE)"];
+    Department -> Instructor [label="1..N\l(CASCADE DELETE)"];
+    Instructor -> Course [label="0..N\l(SET NULL ON DELETE)"];
+
+    // Add constraint annotations
+    edge [fontsize=8, color=gray];
+    Student -> Registration [style=dashed, label="FK: student_id"];
+    Course -> Registration [style=dashed, label="FK: course_id"];
+    Department -> Course [style=dashed, label="FK: dept_id"];
+    Department -> Instructor [style=dashed, label="FK: dept_id"];
+    Instructor -> Course [style=dashed, label="FK: instructor_id"];
+}
