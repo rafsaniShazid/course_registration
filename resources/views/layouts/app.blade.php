@@ -67,6 +67,7 @@
                             <li><a class="dropdown-item" href="{{ route('students.with-credits') }}">With Credits</a></li>
                             <li><a class="dropdown-item" href="{{ route('students.unregistered') }}">Unregistered</a></li>
                             <li><a class="dropdown-item" href="{{ route('students.top-performers') }}">Top Performers</a></li>
+                            <li><a class="dropdown-item" href="{{ route('students.course-details') }}">Course Details</a></li>
                         </ul>
                     </li>
                     <li class="nav-item dropdown">

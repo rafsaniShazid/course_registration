@@ -65,6 +65,16 @@
                                                        class="btn btn-outline-warning" title="Edit">
                                                         <i class="bi bi-pencil"></i>
                                                     </a>
+                                                    <form action="{{ route('students.destroy', $student->student_id) }}" 
+                                                          method="POST" 
+                                                          class="d-inline"
+                                                          onsubmit="return confirm('Are you sure you want to delete this student?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-outline-danger" title="Delete">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>

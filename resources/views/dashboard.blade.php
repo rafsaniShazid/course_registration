@@ -40,6 +40,9 @@
                         <a href="{{ route('students.top-performers') }}" class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-trophy"></i> Top Performers
                         </a>
+                        <a href="{{ route('students.course-details') }}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-book"></i> Course Details
+                        </a>
                     </div>
                 </div>
             </div>

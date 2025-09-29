@@ -29,32 +29,37 @@ class StudentController extends Controller
     }
 
     /**
-     * Store a newly created student
+     * Store a newly created student in storage
      */
     public function store(Request $request)
     {
+        // Validate the form data
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students',
-            'major' => 'required|string|max:100',
-            'year' => 'required|integer|min:1|max:4'
+            'email' => 'required|email|unique:students,email',
+            'major' => 'required|string|max:255',
+            'year' => 'required|integer|between:1,4'
         ]);
 
-        Student::create($request->all());
-        return redirect()->route('students.index')->with('success', 'Student created successfully!');
+        // Create the new student
+        Student::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'major' => $request->major,
+            'year' => $request->year
+        ]);
+
+        // Redirect back to students list with success message
+        return redirect()->route('students.index')->with('success', 'Student added successfully!');
     }
 
     /**
      * Display the specified student with their registrations - RAW SQL VERSION
      */
-    public function show($studentId)
+    public function show(Student $student)
     {
-        // Get student basic info
-        $student = DB::selectOne("SELECT * FROM students WHERE student_id = ?", [$studentId]);
-        
-        if (!$student) {
-            abort(404, 'Student not found');
-        }
+        // Get student_id from the model
+        $studentId = $student->student_id;
         
         // Get complete registration details with one complex query
         $registrationDetails = DB::select("
@@ -82,36 +87,90 @@ class StudentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified student
+     * Show the form for editing the specified student - RAW SQL VERSION
      */
     public function edit(Student $student)
     {
+        // Student is already loaded by route model binding
+        // But if you want to use raw SQL for consistency:
+        $studentId = $student->student_id;
+        $studentData = DB::selectOne("SELECT * FROM students WHERE student_id = ?", [$studentId]);
+        
+        if (!$studentData) {
+            abort(404, 'Student not found');
+        }
+        
+        // Convert stdClass to array for consistency (optional)
+        $student = (object) [
+            'student_id' => $studentData->student_id,
+            'name' => $studentData->name,
+            'email' => $studentData->email,
+            'major' => $studentData->major,
+            'year' => $studentData->year
+        ];
+        
         return view('students.edit', compact('student'));
     }
 
     /**
-     * Update the specified student
+     * Update the specified student - RAW SQL VERSION
      */
     public function update(Request $request, Student $student)
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:students,email,' . $student->student_id . ',student_id',
-            'major' => 'required|string|max:100',
+            'email' => 'required|email',
+            'major' => 'required|string|max:255',
             'year' => 'required|integer|min:1|max:4'
         ]);
 
-        $student->update($request->all());
+        // Get student_id from model
+        $studentId = $student->student_id;
+
+        // Check email uniqueness (exclude current student)
+        $emailCheck = DB::selectOne("SELECT * FROM students WHERE email = ? AND student_id != ?", 
+            [$request->email, $studentId]);
+        if ($emailCheck) {
+            return back()->withErrors(['email' => 'Email already exists'])->withInput();
+        }
+
+        // Update student using raw SQL
+        DB::update("UPDATE students SET name = ?, email = ?, major = ?, year = ?, updated_at = NOW() WHERE student_id = ?", [
+            $request->name,
+            $request->email,
+            $request->major,
+            $request->year,
+            $studentId
+        ]);
+
         return redirect()->route('students.index')->with('success', 'Student updated successfully!');
     }
 
     /**
-     * Remove the specified student
+     * Remove the specified student - RAW SQL VERSION with CASCADE DELETE
      */
     public function destroy(Student $student)
     {
-        $student->delete();
-        return redirect()->route('students.index')->with('success', 'Student deleted successfully!');
+        // Get the student_id from the model
+        $studentId = $student->student_id;
+        
+        // Get count of registrations for feedback (optional - for user information)
+        $registrationCount = DB::selectOne("SELECT COUNT(*) as count FROM registrations WHERE student_id = ?", [$studentId]);
+        
+        // Use transaction for data integrity
+        DB::transaction(function() use ($studentId) {
+            // First delete all registrations (CASCADE DELETE manually)
+            DB::delete("DELETE FROM registrations WHERE student_id = ?", [$studentId]);
+            
+            // Then delete the student
+            DB::delete("DELETE FROM students WHERE student_id = ?", [$studentId]);
+        });
+        
+        $message = $registrationCount->count > 0 
+            ? "Student and {$registrationCount->count} registration(s) deleted successfully!"
+            : "Student deleted successfully!";
+            
+        return redirect()->route('students.index')->with('success', $message);
     }
 
     // Advanced Query Examples Using Raw SQL for Learning
@@ -233,7 +292,7 @@ class StudentController extends Controller
         
         $studentCourseDetails = DB::select($sql);
         
-        return view('students.with-course-details', compact('studentCourseDetails'));
+        return view('students.course-details', compact('studentCourseDetails'));
     }
 
     /**
