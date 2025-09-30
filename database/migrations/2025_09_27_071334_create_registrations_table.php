@@ -14,7 +14,7 @@ return new class extends Migration
             create table registrations (
             reg_id int auto_increment primary key,
             student_id int not null,
-            course_id int not null,
+            course_id varchar(10) not null,
             semester varchar(20) not null,
             grade char(2),
             registered_at timestamp default current_timestamp,

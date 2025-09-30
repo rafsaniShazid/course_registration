@@ -17,19 +17,19 @@ class RegistrationSeeder extends Seeder
             // Alice Johnson (CS Student) registrations
             [
                 'student_id' => 1,  // Alice Johnson
-                'course_id' => 1,   // Introduction to Programming
+                'course_id' => 'CS101',   // Introduction to Programming
                 'semester' => 'Fall 2024',
                 'grade' => 'A-'
             ],
             [
                 'student_id' => 1,  // Alice Johnson
-                'course_id' => 5,   // Calculus I
+                'course_id' => 'MATH101',   // Calculus I
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
             [
                 'student_id' => 1,  // Alice Johnson
-                'course_id' => 3,   // Web Development
+                'course_id' => 'CS301',   // Web Development
                 'semester' => 'Spring 2025',
                 'grade' => null     // Not graded yet
             ],
@@ -37,19 +37,19 @@ class RegistrationSeeder extends Seeder
             // Bob Smith (CS Student) registrations
             [
                 'student_id' => 2,  // Bob Smith
-                'course_id' => 2,   // Data Structures and Algorithms
+                'course_id' => 'CS201',   // Data Structures and Algorithms
                 'semester' => 'Fall 2024',
                 'grade' => 'A'
             ],
             [
                 'student_id' => 2,  // Bob Smith
-                'course_id' => 4,   // Database Systems
+                'course_id' => 'CS401',   // Database Systems
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
             [
                 'student_id' => 2,  // Bob Smith
-                'course_id' => 8,   // Discrete Mathematics
+                'course_id' => 'MATH401',   // Discrete Mathematics
                 'semester' => 'Spring 2025',
                 'grade' => null
             ],
@@ -57,19 +57,19 @@ class RegistrationSeeder extends Seeder
             // Diana Wilson (Math Student) registrations
             [
                 'student_id' => 4,  // Diana Wilson
-                'course_id' => 5,   // Calculus I
+                'course_id' => 'MATH101',   // Calculus I
                 'semester' => 'Fall 2024',
                 'grade' => 'A'
             ],
             [
                 'student_id' => 4,  // Diana Wilson
-                'course_id' => 6,   // Linear Algebra
+                'course_id' => 'MATH201',   // Linear Algebra
                 'semester' => 'Fall 2024',
                 'grade' => 'A-'
             ],
             [
                 'student_id' => 4,  // Diana Wilson
-                'course_id' => 7,   // Statistics
+                'course_id' => 'MATH301',   // Statistics
                 'semester' => 'Spring 2025',
                 'grade' => null
             ],
@@ -77,19 +77,19 @@ class RegistrationSeeder extends Seeder
             // George Lee (Physics Student) registrations
             [
                 'student_id' => 7,  // George Lee
-                'course_id' => 9,   // General Physics I
+                'course_id' => 'PHYS101',   // General Physics I
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
             [
                 'student_id' => 7,  // George Lee
-                'course_id' => 5,   // Calculus I
+                'course_id' => 'MATH101',   // Calculus I
                 'semester' => 'Fall 2024',
                 'grade' => 'B'
             ],
             [
                 'student_id' => 7,  // George Lee
-                'course_id' => 11,  // Thermodynamics
+                'course_id' => 'PHYS201',  // Thermodynamics
                 'semester' => 'Spring 2025',
                 'grade' => null
             ],
@@ -97,13 +97,13 @@ class RegistrationSeeder extends Seeder
             // Ian Thompson (Business Student) registrations
             [
                 'student_id' => 9,  // Ian Thompson
-                'course_id' => 12,  // Introduction to Business
+                'course_id' => 'BUS101',  // Introduction to Business
                 'semester' => 'Fall 2024',
                 'grade' => 'A-'
             ],
             [
                 'student_id' => 9,  // Ian Thompson
-                'course_id' => 15,  // English Composition
+                'course_id' => 'ENG101',  // English Composition
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
@@ -111,13 +111,13 @@ class RegistrationSeeder extends Seeder
             // Laura Taylor (English Student) registrations
             [
                 'student_id' => 12, // Laura Taylor
-                'course_id' => 15,  // English Composition
+                'course_id' => 'ENG101',  // English Composition
                 'semester' => 'Fall 2024',
                 'grade' => 'A'
             ],
             [
                 'student_id' => 12, // Laura Taylor
-                'course_id' => 16,  // Shakespeare Studies
+                'course_id' => 'ENG201',  // Shakespeare Studies
                 'semester' => 'Fall 2024',
                 'grade' => 'A-'
             ],
@@ -125,13 +125,13 @@ class RegistrationSeeder extends Seeder
             // Nina Rodriguez (Chemistry Student) registrations
             [
                 'student_id' => 14, // Nina Rodriguez
-                'course_id' => 18,  // General Chemistry I
+                'course_id' => 'CHEM101',  // General Chemistry I
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
             [
                 'student_id' => 14, // Nina Rodriguez
-                'course_id' => 5,   // Calculus I
+                'course_id' => 'MATH101',   // Calculus I
                 'semester' => 'Fall 2024',
                 'grade' => 'B'
             ],
@@ -139,13 +139,13 @@ class RegistrationSeeder extends Seeder
             // Quinn Walker (CS Student - 1st year) registrations
             [
                 'student_id' => 17, // Quinn Walker
-                'course_id' => 1,   // Introduction to Programming
+                'course_id' => 'CS101',   // Introduction to Programming
                 'semester' => 'Spring 2025',
                 'grade' => null
             ],
             [
                 'student_id' => 17, // Quinn Walker
-                'course_id' => 15,  // English Composition
+                'course_id' => 'ENG101',  // English Composition
                 'semester' => 'Spring 2025',
                 'grade' => null
             ],
@@ -153,13 +153,13 @@ class RegistrationSeeder extends Seeder
             // Cross-major registrations (students taking electives)
             [
                 'student_id' => 3,  // Charlie Davis (CS)
-                'course_id' => 13,  // Marketing Fundamentals
+                'course_id' => 'BUS201',  // Marketing Fundamentals
                 'semester' => 'Fall 2024',
                 'grade' => 'B+'
             ],
             [
                 'student_id' => 11, // Kevin Anderson (Business)
-                'course_id' => 1,   // Introduction to Programming
+                'course_id' => 'CS101',   // Introduction to Programming
                 'semester' => 'Spring 2025',
                 'grade' => null
             ]

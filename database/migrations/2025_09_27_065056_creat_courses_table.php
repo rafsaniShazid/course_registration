@@ -12,7 +12,7 @@ return new class extends Migration
     {
         DB::statement('
             create table courses (
-            course_id int auto_increment primary key,
+            course_id varchar(10) primary key,
             title varchar(150) not null,
             credits decimal(3,1) not null,
             dept_id int not null,
