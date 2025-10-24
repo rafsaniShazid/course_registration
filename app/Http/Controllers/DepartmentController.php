@@ -13,7 +13,8 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        $departments = Department::all();
+        // Load departments with their courses and instructors for statistics
+        $departments = Department::with(['courses', 'instructors'])->get();
         return view('departments.index', compact('departments'));
     }
 
