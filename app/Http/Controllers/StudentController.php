@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use App\Models\Registration;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,7 +15,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = DB::select("SELECT * FROM students");
         return view('students.index', compact('students'));
     }
 
@@ -41,12 +40,13 @@ class StudentController extends Controller
             'year' => 'required|integer|between:1,4'
         ]);
 
-        // Create the new student
-        Student::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'major' => $request->major,
-            'year' => $request->year
+        // Create the new student using raw SQL
+        DB::insert("INSERT INTO students (name, email, major, year, created_at, updated_at)
+        VALUES (?, ?, ?, ?, NOW(), NOW())", [
+            $request->name,
+            $request->email,
+            $request->major,
+            $request->year
         ]);
 
         // Redirect back to students list with success message
@@ -332,5 +332,115 @@ class StudentController extends Controller
         $semesterPerformance = DB::select($sql);
         
         return view('students.semester-performance', compact('semesterPerformance'));
+    }
+
+    /**
+     * Set Operations: UNION - Combine students from different majors
+     */
+    public function unionExample(Request $request)
+    {
+        // Get all departments for selection
+        $departments = DB::select("SELECT dept_id, dept_name FROM departments ORDER BY dept_name");
+        
+        // Get selected departments or use defaults
+        $dept1 = $request->get('dept1', 'Computer Science');
+        $dept2 = $request->get('dept2', 'Mathematics');
+        
+        $sql = "
+            SELECT name, major, ? as category
+            FROM students 
+            WHERE major = ?
+            UNION
+            SELECT name, major, ? as category  
+            FROM students 
+            WHERE major = ?
+            ORDER BY name
+        ";
+        
+        $unionResults = DB::select($sql, [$dept1 . ' Students', $dept1, $dept2 . ' Students', $dept2]);
+        
+        return view('students.union-example', compact('unionResults', 'departments', 'dept1', 'dept2'));
+    }
+
+    /**
+     * Set Operations: INTERSECT - Students who are both in selected major and have taken courses
+     */
+    public function intersectExample(Request $request)
+    {
+        // Get all departments for selection
+        $departments = DB::select("SELECT dept_id, dept_name FROM departments ORDER BY dept_name");
+        
+        // Get selected department or use default
+        $selectedDept = $request->get('department', 'Computer Science');
+        
+        $sql = "
+            SELECT s.name, s.major
+            FROM students s
+            WHERE s.major = ?
+            INTERSECT
+            SELECT s.name, s.major
+            FROM students s
+            INNER JOIN registrations r ON s.student_id = r.student_id
+            WHERE r.grade IS NOT NULL
+        ";
+        
+        $intersectResults = DB::select($sql, [$selectedDept]);
+        
+        return view('students.intersect-example', compact('intersectResults', 'departments', 'selectedDept'));
+    }
+
+    /**
+     * Set Operations: EXCEPT - Students from selected major who haven't registered for courses
+     */
+    public function exceptExample(Request $request)
+    {
+        // Get all departments for selection
+        $departments = DB::select("SELECT dept_id, dept_name FROM departments ORDER BY dept_name");
+        
+        // Get selected department or use default
+        $selectedDept = $request->get('department', 'Computer Science');
+        
+        $sql = "
+            SELECT name, major, email
+            FROM students
+            WHERE major = ?
+            EXCEPT
+            SELECT s.name, s.major, s.email
+            FROM students s
+            INNER JOIN registrations r ON s.student_id = r.student_id
+            WHERE s.major = ?
+        ";
+        
+        $exceptResults = DB::select($sql, [$selectedDept, $selectedDept]);
+        
+        return view('students.except-example', compact('exceptResults', 'departments', 'selectedDept'));
+    }
+
+    /**
+     * Cartesian Product (CROSS JOIN) - All possible combinations with department filtering
+     */
+    public function cartesianProductExample(Request $request)
+    {
+        // Get all departments for selection
+        $departments = DB::select("SELECT dept_id, dept_name FROM departments ORDER BY dept_name");
+        
+        // Get selected department or use default
+        $selectedDept = $request->get('department', 'Computer Science');
+        
+        $sql = "
+            SELECT 
+                s.name as student_name,
+                d.dept_name,
+                CONCAT(s.name, ' - ', d.dept_name) as combination
+            FROM students s
+            CROSS JOIN departments d
+            WHERE s.major = ?
+            ORDER BY s.name, d.dept_name
+            LIMIT 20
+        ";
+        
+        $cartesianResults = DB::select($sql, [$selectedDept]);
+        
+        return view('students.cartesian-product', compact('cartesianResults', 'departments', 'selectedDept'));
     }
 }

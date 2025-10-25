@@ -17,11 +17,18 @@
             <div class="card mb-4">
                 <div class="card-body">
                     <h6 class="card-title">Student Query Examples:</h6>
-                    <div class="btn-group btn-group-sm" role="group">
+                    <div class="btn-group btn-group-sm me-2 mb-2" role="group">
                         <a href="{{ route('students.by-major') }}" class="btn btn-outline-primary">By Major</a>
                         <a href="{{ route('students.with-credits') }}" class="btn btn-outline-primary">With Credits</a>
                         <a href="{{ route('students.unregistered') }}" class="btn btn-outline-primary">Unregistered</a>
                         <a href="{{ route('students.top-performers') }}" class="btn btn-outline-primary">Top Performers</a>
+                    </div>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <span class="btn btn-outline-secondary disabled">Set Operations:</span>
+                        <a href="{{ route('students.union-example') }}" class="btn btn-outline-success">UNION</a>
+                        <a href="{{ route('students.intersect-example') }}" class="btn btn-outline-success">INTERSECT</a>
+                        <a href="{{ route('students.except-example') }}" class="btn btn-outline-success">EXCEPT</a>
+                        <a href="{{ route('students.cartesian-product') }}" class="btn btn-outline-success">CROSS JOIN</a>
                     </div>
                 </div>
             </div>
@@ -57,10 +64,10 @@
                                             <td>Year {{ $student->year }}</td>
                                             <td>
                                                 <div class="btn-group btn-group-sm" role="group">
-                                                    <a href="{{ route('students.show', $student->student_id) }}" 
+                                                    {{-- <a href="{{ route('students.show', $student->student_id) }}" 
                                                        class="btn btn-outline-info" title="View">
                                                         <i class="bi bi-eye"></i>
-                                                    </a>
+                                                    </a> --}}
                                                     <a href="{{ route('students.edit', $student->student_id) }}" 
                                                        class="btn btn-outline-warning" title="Edit">
                                                         <i class="bi bi-pencil"></i>

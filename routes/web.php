@@ -36,6 +36,12 @@ Route::prefix('students')->name('students.')->group(function () {
     Route::get('/reports/top-performers', [StudentController::class, 'topPerformers'])->name('top-performers');
     Route::get('/reports/course-details', [StudentController::class, 'withCourseDetails'])->name('course-details');
     Route::get('/reports/semester-performance', [StudentController::class, 'semesterPerformance'])->name('semester-performance');
+    
+    // Set Operations Examples
+    Route::get('/reports/union-example', [StudentController::class, 'unionExample'])->name('union-example');
+    Route::get('/reports/intersect-example', [StudentController::class, 'intersectExample'])->name('intersect-example');
+    Route::get('/reports/except-example', [StudentController::class, 'exceptExample'])->name('except-example');
+    Route::get('/reports/cartesian-product', [StudentController::class, 'cartesianProductExample'])->name('cartesian-product');
 });
 
 // Courses Routes
