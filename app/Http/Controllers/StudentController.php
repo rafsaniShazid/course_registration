@@ -11,12 +11,24 @@ class StudentController extends Controller
     // Basic CRUD Operations
     
     /**
-     * Display a listing of all students
+     * Display a listing of all students with search functionality
      */
-    public function index()
+    public function index(Request $request)
     {
-        $students = DB::select("SELECT * FROM students");
-        return view('students.index', compact('students'));
+        $search = $request->get('search');
+        $searchField = $request->get('search_field', 'name'); // Default to name search
+
+        if ($search) {
+            // Use LIKE operation for search functionality
+            $sql = "SELECT * FROM students WHERE {$searchField} LIKE ? ORDER BY name";
+            $students = DB::select($sql, ["%{$search}%"]);
+            $sqlQuery = "SELECT * FROM students WHERE {$searchField} LIKE '%{$search}%' ORDER BY name";
+        } else {
+            $students = DB::select("SELECT * FROM students ORDER BY name");
+            $sqlQuery = "SELECT * FROM students ORDER BY name";
+        }
+
+        return view('students.index', compact('students', 'search', 'searchField', 'sqlQuery'));
     }
 
     /**
