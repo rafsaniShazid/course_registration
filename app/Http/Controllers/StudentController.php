@@ -299,7 +299,7 @@ class StudentController extends Controller
             INNER JOIN courses c ON r.course_id = c.course_id
             INNER JOIN departments d ON c.dept_id = d.dept_id
             INNER JOIN instructors i ON c.instructor_id = i.instructor_id
-            ORDER BY s.name, r.semester
+            ORDER BY r.grade 
         ";
         
         $studentCourseDetails = DB::select($sql);

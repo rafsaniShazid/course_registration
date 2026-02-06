@@ -111,9 +111,7 @@
                                 <a href="{{ route('students.course-details') }}" class="btn btn-outline-success btn-sm">
                                     <i class="bi bi-journal-text"></i> Course Details
                                 </a>
-                                <a href="{{ route('students.semester-performance') }}" class="btn btn-outline-success btn-sm">
-                                    <i class="bi bi-calendar-event"></i> Semester Perf.
-                                </a>
+                                
                             </div>
                             <h6 class="text-warning mb-2">⚡ Set Operations</h6>
                             <div class="d-grid gap-1">
